@@ -6,7 +6,10 @@ export default function App() {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem("highScore");
+    return saved ? Number(saved) : 0;
+  });
   const [clickedId, setClickedId] = useState([]);
   useEffect(() => {
     const fetchCards = async () => {
@@ -40,6 +43,10 @@ export default function App() {
 
     fetchCards();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("highScore", highScore);
+  }, [highScore]);
 
   const handleCardClick = (id) => {
     if (clickedId.includes(id)) {
